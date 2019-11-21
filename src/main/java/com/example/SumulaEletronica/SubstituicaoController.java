@@ -1,5 +1,7 @@
 package com.example.SumulaEletronica;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
@@ -28,16 +30,15 @@ public class SubstituicaoController
 		return toEntity(SubstituicaoDTO.NULL_VALUE);
 	}
 	
-	public long saveSubstituicao(SubstituicaoCreateDTO substituicaoDTO)
+	public List<Long> saveSubstituicao(List<SubstituicaoCreateDTO> novasSubstituicoes)
 	{
-		SubstituicaoEntity novaSubstituicao = toEntity(substituicaoDTO);
+		List<Long> ids = new ArrayList<>();
 		
-		if(novaSubstituicao.getId() != null)
-		{
-			return this.substituicaoRepository.save(novaSubstituicao).getId();
-		}
-		
-		return 0;
+		novasSubstituicoes.forEach(substituicaoDTO -> {
+			ids.add(this.substituicaoRepository.save(toEntity(substituicaoDTO)).getId());
+		});
+				
+		return ids;
 	}
 		
 	private SubstituicaoEntity toEntity(SubstituicaoCreateDTO substituicaoDTO)

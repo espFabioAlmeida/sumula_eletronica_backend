@@ -1,5 +1,7 @@
 package com.example.SumulaEletronica;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +19,9 @@ public class RelacaoService
 	}
 	
 	@PostMapping("/post")
-	public long novaRelacao(@RequestBody RelacaoDTO novaRelacao) 
+	public List<Long> novaRelacao(@RequestBody List<RelacaoDTO> novasRelacoes) 
 	{		
-		return this.relacaoController.saveRelacao(novaRelacao);
+		return this.relacaoController.saveRelacoes(novasRelacoes);
 	}	
 	
 	

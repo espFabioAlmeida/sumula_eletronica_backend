@@ -1,5 +1,7 @@
 package com.example.SumulaEletronica;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +19,8 @@ public class SubstituicaoService
 	}
 	
 	@PostMapping("/post")
-	public long novaSubstituicao(@RequestBody SubstituicaoCreateDTO novaSubstituicao) 
+	public List<Long> novaSubstituicao(@RequestBody List<SubstituicaoCreateDTO> novasSubstituicoes) 
 	{		
-		return this.substituicaoController.saveSubstituicao(novaSubstituicao);
+		return this.substituicaoController.saveSubstituicao(novasSubstituicoes);
 	}
 }
