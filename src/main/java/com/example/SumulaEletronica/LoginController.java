@@ -14,7 +14,7 @@ public class LoginController {
 		this.arbitroRepository = arbitroRepository;
 	}
 	
-	public ArbitroDTO logaArbitro(ArbitroDTO arbitroLogin)
+	public LoginDTO logaArbitro(LoginDTO arbitroLogin)
 	{
 		ArrayList<ArbitroDTO> listaArbitros = new ArrayList<ArbitroDTO>();		
 		this.arbitroRepository.findAll().forEach(arbitroEntity -> listaArbitros.add(toDTO(arbitroEntity)));		
@@ -27,15 +27,18 @@ public class LoginController {
 				{
 					if(arbitroEncontrado.getFuncao().equals("Arbitro"))
 					{
-						return arbitroEncontrado;
+						arbitroLogin.setArbitro(removeSenha(arbitroEncontrado));
+						arbitroLogin.setToken(" *** INSERIR TOKEN AQUI ****");
+						arbitroLogin.setSenha("");
+						return arbitroLogin;
 					}
 				}
 			}
 		}
 		
-		return ArbitroDTO.NULL_VALUE;
+		return LoginDTO.NULL_VALUE;
 	}
-	
+		
 	private ArbitroDTO toDTO(ArbitroEntity arbitroEntity)
 	{	
 		return new ArbitroDTO(arbitroEntity.getNome(), arbitroEntity.getSenha(), arbitroEntity.getCpf(), arbitroEntity.getDataNascimento(),
@@ -43,5 +46,15 @@ public class LoginController {
 				arbitroEntity.getId());
 	}
 	
+	private ArbitroDTO removeSenha(ArbitroDTO arbitroDTO)
+	{
+		ArbitroDTO arbitroSemSenha;
+		
+		arbitroSemSenha = new ArbitroDTO(arbitroDTO.getNome(), "", arbitroDTO.getCpf(), arbitroDTO.getDataNascimento(), 
+				arbitroDTO.getSexo(), arbitroDTO.getCategoria(),
+				arbitroDTO.getFuncao(), arbitroDTO.getAltura(), arbitroDTO.getPeso(), arbitroDTO.getId());
+		
+		return arbitroSemSenha;
+	}
 
 }

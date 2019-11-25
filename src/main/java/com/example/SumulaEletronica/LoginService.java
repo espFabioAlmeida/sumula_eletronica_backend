@@ -20,16 +20,16 @@ public class LoginService
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<ArbitroDTO> logaArbitro(@RequestBody ArbitroDTO loginArbitro) 
+	public ResponseEntity<LoginDTO> logaArbitro(@RequestBody LoginDTO loginDTO) 
 	{
-		final ArbitroDTO arbitroDTO = this.loginController.logaArbitro(loginArbitro);
+		loginDTO = this.loginController.logaArbitro(loginDTO);
 		
-		if(arbitroDTO == ArbitroDTO.NULL_VALUE)
+		if(loginDTO == LoginDTO.NULL_VALUE)
 		{
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<>(arbitroDTO, HttpStatus.OK);	
+		return new ResponseEntity<>(loginDTO, HttpStatus.OK);	
 	}
 
 }
