@@ -1,6 +1,9 @@
 package com.example.SumulaEletronica;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 
@@ -8,10 +11,12 @@ import org.springframework.stereotype.Controller;
 public class LoginController {
 	
 	ArbitroRepository arbitroRepository;
+	AuthenticationController authController;
 	
-	LoginController(ArbitroRepository arbitroRepository)
+	LoginController(ArbitroRepository arbitroRepository, AuthenticationController authController)
 	{
 		this.arbitroRepository = arbitroRepository;
+		this.authController = authController;
 	}
 	
 	public LoginDTO logaArbitro(LoginDTO arbitroLogin)
@@ -27,9 +32,18 @@ public class LoginController {
 				{
 					if(arbitroEncontrado.getFuncao().equals("Arbitro"))
 					{
+						Random random = new Random();
+						String token = String.valueOf(Long.toHexString(random.nextLong())) +
+								String.valueOf(Long.toHexString(random.nextLong())) +
+								String.valueOf(Long.toHexString(random.nextLong())) +
+								String.valueOf(Long.toHexString(random.nextLong()));	
+												
 						arbitroLogin.setArbitro(removeSenha(arbitroEncontrado));
-						arbitroLogin.setToken(" *** INSERIR TOKEN AQUI ****");
+						arbitroLogin.setToken(token);
 						arbitroLogin.setSenha("");
+						
+						this.authController.saveToken(arbitroLogin);
+											
 						return arbitroLogin;
 					}
 				}
@@ -37,6 +51,23 @@ public class LoginController {
 		}
 		
 		return LoginDTO.NULL_VALUE;
+	}
+	
+	public LoginDTO logaArbitroPorToken(HttpServletRequest request)
+	{
+		AuthenticationDTO authDTO = this.authController.verificaToken(request);
+		
+		if(authDTO == AuthenticationDTO.NULL_VALUE)
+		{
+			return LoginDTO.NULL_VALUE;
+		}
+		
+		return new LoginDTO("", "", authDTO.getToken(), authDTO.getArbitro());
+	}
+	
+	public Boolean deslogaArbitro(String token)
+	{
+		return this.authController.logoffToken(token);
 	}
 		
 	private ArbitroDTO toDTO(ArbitroEntity arbitroEntity)
@@ -56,5 +87,6 @@ public class LoginController {
 		
 		return arbitroSemSenha;
 	}
+	
 
 }
