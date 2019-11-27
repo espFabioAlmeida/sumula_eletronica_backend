@@ -16,7 +16,7 @@ public class AuthenticationController
 {
 	private String token;
 	
-	private static final Integer TEMPO_TOKEN = 5; //Tempo de expiração do token, em minutos
+	private static final Integer TEMPO_TOKEN = 20; //Tempo de expiração do token, em minutos
 	
 	AuthenticationRepository authRepository;
 	ArbitroController arbitroContoller;
